@@ -8,6 +8,7 @@ const cors = require('cors');
 const saveContentRoute = require('./routes/fileWriter');
 const resetFileContentRoute = require('./routes/reset-filecontent');
 const createComponentsRouter = require('./routes/createcomponents');
+const commitDeployRouter = require('./routes/commit-deploy');
 
 
 dotenv.config();
@@ -23,6 +24,8 @@ app.use(express.json());
 app.use('/api', saveContentRoute);
 app.use('/api/reset-filecontent', resetFileContentRoute);
 app.use(createComponentsRouter);
+
+
 // Session middleware
 app.use(session({
   secret: process.env.SESSION_SECRET,
@@ -52,6 +55,7 @@ passport.deserializeUser((user, done) => {
   done(null, user);
 });
 
+app.use('/api', commitDeployRouter);
 // OAuth routes
 app.get('/auth/github', passport.authenticate('github', { scope: ['repo'] }));
 
