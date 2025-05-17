@@ -10,13 +10,16 @@ router.post('/commit-deploy', async (req, res) => {
   const {
     repo,
     username,
-    framework,
+    framework: rawFramework,
     buildCommand,
     outputDirectory,
     rootDirectory = '.',
     branch = 'main',
     repoId
   } = req.body;
+
+  // Normalize framework input
+  const framework = rawFramework === 'react' ? 'create-react-app' : rawFramework;
 
   try {
     const project = await db.getProject(username, repo);

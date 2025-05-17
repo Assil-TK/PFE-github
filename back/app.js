@@ -9,7 +9,8 @@ const saveContentRoute = require('./routes/fileWriter');
 const resetFileContentRoute = require('./routes/reset-filecontent');
 const createComponentsRouter = require('./routes/createcomponents');
 const commitDeployRouter = require('./routes/commit-deploy');
-
+const generateFileRouter = require('./routes/generateFile');
+const deleteFileRouter = require('./routes/deleteFile');
 
 dotenv.config();
 const app = express();
@@ -20,10 +21,6 @@ app.use(cors({
   credentials: true
 }));
 
-app.use(express.json());
-app.use('/api', saveContentRoute);
-app.use('/api/reset-filecontent', resetFileContentRoute);
-app.use(createComponentsRouter);
 
 
 // Session middleware
@@ -36,6 +33,16 @@ app.use(session({
 // Passport setup
 app.use(passport.initialize());
 app.use(passport.session());
+
+
+app.use(express.json());
+app.use('/api', saveContentRoute);
+app.use('/api/reset-filecontent', resetFileContentRoute);
+app.use(createComponentsRouter);
+app.use(generateFileRouter);
+app.use('/api', deleteFileRouter);
+
+
 
 // GitHub Strategy
 passport.use(new GitHubStrategy({
